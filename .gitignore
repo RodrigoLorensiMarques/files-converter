@@ -1,0 +1,7 @@
+.venv/
+pycache__/
+*.pyc
+
+logs/
+diretorio_teste/
+config.py
