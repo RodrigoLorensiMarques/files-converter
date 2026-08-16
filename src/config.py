@@ -1,10 +1,12 @@
 from pathlib import Path
 
-DIRETORIOS = [
-    Path(r"/Users/rodrigomarques/Documents/GitHub/files-converter/diretorio_teste"),
-    Path(r"/Users/rodrigomarques/Documents/GitHub/files-converter/outro_diretorio"),
-]
+ARQUIVO_DIRETORIOS = Path("/Users/rodrigomarques/Documents/GitHub/files-converter/diretorios.txt")
 
+DIRETORIOS = [
+    Path(linha.strip())
+    for linha in ARQUIVO_DIRETORIOS.read_text(encoding="utf-8").splitlines()
+    if linha.strip() and not linha.startswith("#")
+]
 # Conversão
 ESCALA = 1.0
 
