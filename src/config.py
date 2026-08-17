@@ -13,6 +13,9 @@ ESCALA = 1.0
 # Ritmo de varredura
 INTERVALO = 2
 
+PREFIXO_ATUALIZACAO = "AAA"
+PREFIXO_NOVO = "BBB"
+
 
 # Logs
 LOG_ARQUIVO = Path("/Users/rodrigomarques/Documents/GitHub/files-converter/logs/pdf2gif.log")

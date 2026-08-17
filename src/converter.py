@@ -1,8 +1,8 @@
 from pathlib import Path
 import logging
-
 import pypdfium2 as pdfium
 from PIL import Image
+from prefixo_conta import PrefixoConta
 
 log = logging.getLogger(__name__)
 
@@ -28,15 +28,17 @@ class ConvertPDFtoGIF:
         img.convert("1", dither=Image.Dither.NONE).save(destino, optimize=True)
         return destino
 
-    def converter_lote(self, pdfs: list[Path], pasta_saida: Path) -> list[Path]:
+    def converter_lote(self, pdfs: list[Path], pasta_saida: Path) -> list[tuple[Path, Path]]:
         gerados = []
+        prefixo = PrefixoConta().prefixo(pasta_saida)
+
         for pdf in pdfs:
-            destino = pasta_saida / f"{pdf.stem}.gif"
+            destino = pasta_saida / f"{prefixo}_{pdf.stem}.gif"
             try:
                 self.converter(pdf, destino)
                 kb = destino.stat().st_size // 1024
                 log.info("convertido: %s -> %s (%d KB)", pdf.name, destino.name, kb)
-                gerados.append(destino)
+                gerados.append((pdf, destino))
             except Exception:
                 log.exception("falha ao converter: %s", pdf.name)
         return gerados

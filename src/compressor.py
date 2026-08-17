@@ -1,5 +1,10 @@
 from pathlib import Path
 from PIL import Image
+import logging
+
+
+log = logging.getLogger(__name__)
+
 
 LIMITE = 50 * 1024
 FATORES = [0.85, 0.7, 0.6, 0.5, 0.4]
@@ -24,5 +29,12 @@ class GifCompressor:
 
         return False
 
-    def comprimir_lote(self, gifs: list[Path]) -> list[Path]:
-        return [gif for gif in gifs if self.comprimir(gif)]
+    def comprimir_lote(self, pares: list[tuple[Path, Path]]) -> list[tuple[Path, Path]]:
+        prontos = []
+        for pdf, gif in pares:
+            try:
+                if self.comprimir(gif):
+                    prontos.append((pdf, gif))
+            except Exception:
+                log.exception("falha ao comprimir: %s", gif.name)
+        return prontos

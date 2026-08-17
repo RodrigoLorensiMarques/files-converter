@@ -22,15 +22,16 @@ log.info("iniciado — monitorando %d diretório(s)", len(DIRETORIOS))
 
 while True:
     for diretorio in DIRETORIOS:
-        pdfs = watcher.varrer(diretorio)
+        try:
+            pdfs = watcher.varrer(diretorio)
 
-        if pdfs:
-            gifs = conversor.converter_lote(pdfs, diretorio)
-            prontos = compressor.comprimir_lote(gifs)
+            if pdfs:
+                pares = conversor.converter_lote(pdfs, diretorio)
+                prontos = compressor.comprimir_lote(pares)
 
-            convertidos = {gif.stem for gif in gifs}
-            for pdf in pdfs:
-                if pdf.stem in convertidos:
+                for pdf, gif in prontos:
                     pdf.unlink()
+        except Exception:
+            log.exception("falha ao processar diretório: %s", diretorio)
 
     time.sleep(INTERVALO)
